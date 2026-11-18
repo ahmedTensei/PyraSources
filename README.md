@@ -29,6 +29,8 @@ The build uses the Kotlin 2.4.21 compiler with the Kotlin 2.2 language/API subse
 
 The JVM source JAR is emitted under `build/sources/` for app-side fixture tests. Android loads the verified Dex ZIP through the stable `com.tensei.app.domain.source.PublisherSourceFactory` contract. The host supplies its shared `OkHttpClient`, including cookies and verification handling. The publisher factory returns sources in catalogue order.
 
+For future sources with several website/API hosts, keep a correct `Referer` for every request. Source authors may also attach `Request.Builder.tag(String::class.java, id)` to identify the source to the host's verification coordinator; this tag is private request metadata and is not sent as an HTTP header. The current parsers already supply their website origin as the referrer, including Swat's separate API host.
+
 ## Add or update a source
 
 1. Add or edit a parser under `sources/src/main/kotlin`. Preserve an existing source's ID when updating it; changing IDs would disconnect saved reading data.
