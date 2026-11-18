@@ -304,4 +304,3 @@ class TeamXSource @Inject constructor(
         private val RATING_REGEX = Regex("""(\d+(?:\.\d+)?)\s*/\s*(\d+(?:\.\d+)?)""")
     }
 }
-

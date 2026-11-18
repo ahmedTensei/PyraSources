@@ -157,4 +157,3 @@ data class SourceDescriptor(
     val lang: List<String>,
     val capabilities: com.tensei.app.domain.source.SourceCapabilities
 )
-

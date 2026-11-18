@@ -7,5 +7,3 @@ class CloudflareChallengeException(
     val sourceHost: String,
     override val message: String = "تم اكتشاف حماية Cloudflare على $sourceHost"
 ) : IOException(message)
-
-

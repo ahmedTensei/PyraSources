@@ -3,9 +3,23 @@ import groovy.json.JsonSlurper
 import java.security.MessageDigest
 import java.util.Properties
 import java.util.zip.ZipFile
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+import java.util.zip.CRC32
+import java.time.LocalDateTime
+import org.objectweb.asm.ClassReader
+import org.objectweb.asm.ClassWriter
+import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.AnnotationVisitor
+import org.objectweb.asm.Opcodes
 import org.gradle.api.attributes.Usage
 
 plugins { java }
+
+buildscript {
+    repositories { mavenCentral() }
+    dependencies { classpath("org.ow2.asm:asm:9.9") }
+}
 
 repositories { google(); mavenCentral() }
 
@@ -31,6 +45,7 @@ dependencies {
 
 val sdkClasses = layout.buildDirectory.dir("sdk-classes")
 val sourceClasses = layout.buildDirectory.dir("source-classes")
+val normalizedSourceClasses = layout.buildDirectory.dir("source-runtime-classes")
 val sourceTestClasses = layout.buildDirectory.dir("source-test-classes")
 val sdkFiles = fileTree("sdk/src/main/kotlin") { include("**/*.kt") }
 val sourceFiles = fileTree("sources/src/main/kotlin") { include("**/*.kt") }
@@ -47,6 +62,7 @@ val compileSdk by tasks.registering(JavaExec::class) {
     classpath = kotlinCompiler
     mainClass.set("org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")
     doFirst {
+        delete(sdkClasses.get().asFile)
         args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "TenseiSourceApi",
             "-classpath", sourceLibraries.asPath, "-d", sdkClasses.get().asFile.absolutePath) + sdkFiles.files.sortedBy { it.path }.map { it.absolutePath }
     }
@@ -66,16 +82,40 @@ val compileSources by tasks.registering(JavaExec::class) {
     classpath = kotlinCompiler
     mainClass.set("org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")
     doFirst {
+        delete(sourceClasses.get().asFile)
         val sdkClasspath = files(sdkJar.get().archiveFile, sourceLibraries).asPath
         args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "TenseiOfficialSources",
             "-classpath", sdkClasspath, "-d", sourceClasses.get().asFile.absolutePath) + sourceFiles.files.sortedBy { it.path }.map { it.absolutePath }
     }
 }
-val sourceJar by tasks.registering(Jar::class) {
+val normalizeSourceBytecode by tasks.registering {
     dependsOn(compileSources)
+    inputs.dir(sourceClasses)
+    outputs.dir(normalizedSourceClasses)
+    doLast {
+        val input = sourceClasses.get().asFile
+        val output = normalizedSourceClasses.get().asFile
+        delete(output)
+        input.walkTopDown().filter { it.isFile }.forEach { original ->
+            val target = output.resolve(original.relativeTo(input))
+            target.parentFile.mkdirs()
+            if (original.extension == "class") {
+                val writer = ClassWriter(0)
+                ClassReader(original.readBytes()).accept(object : ClassVisitor(Opcodes.ASM9, writer) {
+                    override fun visitSource(source: String?, debug: String?) { super.visitSource(source, null) }
+                    override fun visitAnnotation(descriptor: String, visible: Boolean): AnnotationVisitor? =
+                        if (descriptor == "Lkotlin/jvm/internal/SourceDebugExtension;") null else super.visitAnnotation(descriptor, visible)
+                }, 0)
+                target.writeBytes(writer.toByteArray())
+            } else original.copyTo(target)
+        }
+    }
+}
+val sourceJar by tasks.registering(Jar::class) {
+    dependsOn(normalizeSourceBytecode)
     archiveFileName.set("$bundleId-$bundleVersion.jar")
     destinationDirectory.set(layout.buildDirectory.dir("sources"))
-    from(sourceClasses)
+    from(normalizedSourceClasses)
     isPreserveFileTimestamps = false
     isReproducibleFileOrder = true
 }
@@ -86,6 +126,7 @@ val compileSourceTests by tasks.registering(JavaExec::class) {
     classpath = kotlinCompiler
     mainClass.set("org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")
     doFirst {
+        delete(sourceTestClasses.get().asFile)
         val testClasspath = files(sourceJar.get().archiveFile, sdkJar.get().archiveFile, sourceTestLibraries).asPath
         args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "TenseiSourceTests",
             "-classpath", testClasspath, "-d", sourceTestClasses.get().asFile.absolutePath) + sourceTestFiles.files.sortedBy { it.path }.map { it.absolutePath }
@@ -122,6 +163,23 @@ val dexSources by tasks.registering(JavaExec::class) {
         args = listOf("--release", "--min-api", "26", "--lib", androidJar.absolutePath) +
             files(sdkJar.get().archiveFile, sourceLibraries).files.flatMap { listOf("--classpath", it.absolutePath) } +
             listOf("--output", dexZip.asFile.absolutePath, sourceJar.get().archiveFile.get().asFile.absolutePath)
+    }
+    doLast {
+        // Stored bytes and a fixed local DOS timestamp avoid JDK/zlib/time-zone ZIP drift.
+        val dexBytes = ZipFile(dexZip.asFile).use { zip -> zip.getInputStream(zip.getEntry("classes.dex")).use { it.readBytes() } }
+        val crc = CRC32().apply { update(dexBytes) }.value
+        ZipOutputStream(dexZip.asFile.outputStream()).use { zip ->
+            val entry = ZipEntry("classes.dex").apply {
+                method = ZipEntry.STORED
+                size = dexBytes.size.toLong()
+                compressedSize = size
+                this.crc = crc
+                setTimeLocal(LocalDateTime.of(1980, 1, 1, 0, 0))
+            }
+            zip.putNextEntry(entry)
+            zip.write(dexBytes)
+            zip.closeEntry()
+        }
     }
 }
 val verifyPayload by tasks.registering {

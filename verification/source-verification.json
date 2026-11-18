@@ -1,0 +1,28 @@
+{
+  "date": "2026-11-18",
+  "bundle": "tensei-official",
+  "versionCode": 2,
+  "apiVersion": 1,
+  "sources": [
+    "mangatek",
+    "mangaswat",
+    "teamx"
+  ],
+  "tests": {
+    "count": 8,
+    "failures": 0,
+    "errors": 0
+  },
+  "payload": {
+    "file": "releases/tensei-official-2.dex.zip",
+    "sha256": "c30fefb4d6edac27f4db908bb814f1e2d0bfdea2508932862fb56a5e16cbea07",
+    "bytes": 81798,
+    "entry": "classes.dex",
+    "hostAndApplicationClassesBundled": false
+  },
+  "buildNormalization": [
+    "Kotlin source-debug mappings omitted; ordinary file/line and coroutine metadata retained",
+    "Stored ZIP entry with fixed local DOS timestamp"
+  ],
+  "previousVersion1Immutable": true
+}

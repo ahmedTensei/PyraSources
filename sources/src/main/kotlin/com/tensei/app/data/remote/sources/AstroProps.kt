@@ -68,4 +68,3 @@ internal fun JsonObject.flag(key: String): Boolean {
 internal fun JsonObject.obj(key: String): JsonObject? = this[key] as? JsonObject
 
 internal fun JsonObject.arr(key: String): List<JsonElement> = (this[key] as? JsonArray).orEmpty()
-

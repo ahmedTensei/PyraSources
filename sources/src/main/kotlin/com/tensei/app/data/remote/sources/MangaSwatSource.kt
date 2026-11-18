@@ -278,4 +278,3 @@ class MangaSwatSource @Inject constructor(
         private const val MAX_CHAPTER_REQUESTS = 25
     }
 }
-

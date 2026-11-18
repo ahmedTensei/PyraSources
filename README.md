@@ -25,7 +25,7 @@ Install JDK 17 or newer and Android SDK Build Tools `36.0.0`, plus platform `and
 ./gradlew test publishSources
 ```
 
-The build uses the Kotlin 2.4.21 compiler with the Kotlin 2.2 language/API subset, matching Build Tools 36's supported metadata format. Source classes target JVM 17 before D8 converts them for Android API 26 and newer. SDK and third-party dependency classes remain compile-only and are not bundled into the extension.
+The build uses the Kotlin 2.4.21 compiler with the Kotlin 2.2 language/API subset, matching Build Tools 36's supported metadata format. Source classes target JVM 17 before D8 converts them for Android API 26 and newer. Host-specific source-debug mappings are omitted, while ordinary file/line and coroutine debugging metadata remain available. The payload uses stored ZIP entries with fixed timestamps so platform compression and time zones cannot change published hashes. SDK and third-party dependency classes remain compile-only and are not bundled into the extension.
 
 The JVM source JAR is emitted under `build/sources/` for app-side fixture tests. Android loads the verified Dex ZIP through the stable `com.tensei.app.domain.source.PublisherSourceFactory` contract. The host supplies its shared `OkHttpClient`, including cookies and verification handling. The publisher factory returns sources in catalogue order.
 

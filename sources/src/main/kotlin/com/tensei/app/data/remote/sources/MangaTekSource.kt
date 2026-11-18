@@ -273,4 +273,3 @@ class MangaTekSource @Inject constructor(
         private const val CONTENT_LANGUAGE = "ar"
     }
 }
-
