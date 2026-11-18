@@ -1,0 +1,46 @@
+{
+  "count": 3,
+  "next": null,
+  "previous": null,
+  "results": [
+    {
+      "id": 1767850,
+      "title": "02 Logging Out Is Too Hard",
+      "slug": "02-logging-out-is-too-hard",
+      "chapter": "02",
+      "serie": 1702854,
+      "published": null,
+      "views_count": 60,
+      "created_at": "2026-11-14T23:13:43.538151Z",
+      "updated_at": "2026-11-14T23:13:43.538162Z"
+    },
+    {
+      "id": 1767847,
+      "title": "01 Logging Out Is Too Hard",
+      "slug": "01-logging-out-is-too-hard",
+      "chapter": "01",
+      "serie": 1702854,
+      "published": null,
+      "views_count": 166,
+      "created_at": "2026-11-14T22:02:44.970001Z",
+      "updated_at": "2026-11-14T22:02:44.970010Z"
+    },
+    {
+      "id": 1766060,
+      "title": "00 مقدمة",
+      "slug": "00",
+      "chapter": "00",
+      "serie": 1702854,
+      "published": null,
+      "views_count": 616,
+      "created_at": "2026-10-30T11:41:04.542489Z",
+      "updated_at": "2026-10-30T11:41:04.542495Z"
+    }
+  ],
+  "_fixture": {
+    "test_only": true,
+    "captured_at": "2026-11-15T00:37:11+00:00",
+    "source_url": "https://appswat.com/v2/api/v2/series/1702854/chapters/?page_size=200",
+    "notes": "All records from this small real page retained. Account records and per-user read state removed; count/next/previous metadata preserved."
+  }
+}

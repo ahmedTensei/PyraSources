@@ -1,0 +1,28 @@
+[
+  {
+    "id": 34,
+    "name": "شونين",
+    "series_count": 249,
+    "_fixture": {
+      "test_only": true,
+      "captured_at": "2026-11-15T00:37:11+00:00",
+      "source_url": "https://appswat.com/v2/api/v2/genres/",
+      "notes": "First four genuine genre records of 66 retained. Endpoint root array shape preserved; this metadata annotation is test-only."
+    }
+  },
+  {
+    "id": 141,
+    "name": "فانتازي",
+    "series_count": 363
+  },
+  {
+    "id": 65,
+    "name": "ايسكاي",
+    "series_count": 96
+  },
+  {
+    "id": 394,
+    "name": "رياضة",
+    "series_count": 7
+  }
+]

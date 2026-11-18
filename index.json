@@ -1,0 +1,13 @@
+{
+    "schemaVersion": 1,
+    "apiVersion": 1,
+    "extensions": [
+        {
+            "id": "tensei-official",
+            "versionCode": 1,
+            "downloadUrl": "https://raw.githubusercontent.com/ahmedTensei/TenseiSources/main/releases/tensei-official-1.dex.zip",
+            "sha256": "d73bc7c758ef143c95b3928e1d24b02effa2c27e79c749fc9ae4718fd67008b1",
+            "factoryClass": "com.tensei.sources.PublisherSourceFactory"
+        }
+    ]
+}

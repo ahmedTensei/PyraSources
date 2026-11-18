@@ -1,0 +1,74 @@
+{
+  "count": 200,
+  "next": "https://appswat.com/v2/api/v2/series/releases/?page=2&page_size=24",
+  "previous": null,
+  "results": [
+    {
+      "serie_id": 1702854,
+      "title": "Logging Out Is Too Hard",
+      "latest_chapter_updated_at": "2026-11-14T22:02:44.970010Z",
+      "slug": "logging-out-is-too-hard",
+      "type": {
+        "id": 131,
+        "name": "مانهوا كوري"
+      },
+      "status": {
+        "id": 79,
+        "name": "مستمر"
+      },
+      "genres": [
+        {
+          "id": 199,
+          "name": "لعبة"
+        },
+        {
+          "id": 141,
+          "name": "فانتازي"
+        },
+        {
+          "id": 14,
+          "name": "مغامرات"
+        },
+        {
+          "id": 38,
+          "name": "إثارة"
+        },
+        {
+          "id": 17,
+          "name": "إعادة إحياء"
+        },
+        {
+          "id": 32,
+          "name": "أكشن"
+        }
+      ],
+      "poster": {
+        "medium": "https://appswat.com/v2/media/__sized__/series/logging_out_is_too_hard/poster_oFXwKj1-crop-c0-5__0-5-800x1200-70.webp",
+        "thumbnail": "https://appswat.com/v2/media/__sized__/series/logging_out_is_too_hard/poster_oFXwKj1-thumbnail-400x600-70.webp"
+      },
+      "is_hot": false,
+      "views_count": 2967,
+      "rating": "0.0",
+      "chapters": [
+        {
+          "id": 1767847,
+          "title": "01 Logging Out Is Too Hard",
+          "chapter": "01",
+          "created_at": "2026-11-14T22:02:44.970001+00:00",
+          "updated_at": "2026-11-14T22:02:44.97001+00:00",
+          "created_at_humanized": "17 دقيقة",
+          "updated_at_humanized": "17 دقيقة"
+        },
+        {
+          "id": 1766060,
+          "title": "00 مقدمة",
+          "chapter": "00",
+          "created_at": "2026-10-30T11:41:04.542489+00:00",
+          "updated_at": "2026-10-30T11:41:04.542495+00:00",
+          "created_at_humanized": "أسبوعان",
+          "updated_at_humanized": "أسبوعان"
+        }
+      ]
+    }
+  ]
+}
