@@ -54,4 +54,4 @@ The publishing workflow can be run manually after review. It builds and verifies
 
 The original three parsers retain their existing parsing behavior. Asura and Rawkuma were added from live structures captured on 19 November 2026. Parser fixture entry points and `AstroProps` are public so host regression tests can use the external JAR without retaining site implementations inside the app project. Published version 1 and version 2 ZIP files remain unchanged; version 4 supplies the renamed Pyra API with its own immutable URL.
 
-Optional engine APKs and verified metadata are distributed separately under engines/. They are never included in the source DEX payload or the main Pyra APK. The Android system confirms their Settings-initiated installation.
+
