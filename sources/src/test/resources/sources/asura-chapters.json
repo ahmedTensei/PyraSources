@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id": 262854,
+      "series_id": 6055,
+      "number": 37,
+      "slug": "chapter-37",
+      "page_count": 20,
+      "is_premium": false,
+      "comments_enabled": false,
+      "early_access_until": "2026-11-10T18:47:29.962Z",
+      "published_at": "2026-11-10T12:47:29.962Z",
+      "view_count": 69210,
+      "created_at": "2026-11-10T12:47:06.219315Z",
+      "series_slug": "immortals-way-of-life"
+    },
+    {
+      "id": 262740,
+      "series_id": 6055,
+      "number": 36,
+      "slug": "chapter-36",
+      "page_count": 20,
+      "is_premium": false,
+      "comments_enabled": false,
+      "early_access_until": "2026-11-05T10:33:57.898476Z",
+      "published_at": "2026-11-05T04:33:57.898476Z",
+      "view_count": 89053,
+      "created_at": "2026-11-05T04:34:00.003031Z",
+      "series_slug": "immortals-way-of-life"
+    },
+    {
+      "id": 262567,
+      "series_id": 6055,
+      "number": 35,
+      "slug": "chapter-35",
+      "page_count": 18,
+      "is_premium": false,
+      "comments_enabled": false,
+      "early_access_until": "2026-10-28T12:00:13.074336Z",
+      "published_at": "2026-10-28T06:00:13.074336Z",
+      "view_count": 93643,
+      "created_at": "2026-10-28T06:00:15.612829Z",
+      "series_slug": "immortals-way-of-life"
+    }
+  ]
+}

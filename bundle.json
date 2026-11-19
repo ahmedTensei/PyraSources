@@ -1,6 +1,6 @@
 {
   "id": "tensei-official",
-  "versionCode": 2,
+  "versionCode": 3,
   "apiVersion": 1,
   "factoryClass": "com.tensei.sources.PublisherSourceFactory"
 }

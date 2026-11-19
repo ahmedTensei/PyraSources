@@ -47,9 +47,11 @@ val sdkClasses = layout.buildDirectory.dir("sdk-classes")
 val sourceClasses = layout.buildDirectory.dir("source-classes")
 val normalizedSourceClasses = layout.buildDirectory.dir("source-runtime-classes")
 val sourceTestClasses = layout.buildDirectory.dir("source-test-classes")
+val sourceToolClasses = layout.buildDirectory.dir("source-tool-classes")
 val sdkFiles = fileTree("sdk/src/main/kotlin") { include("**/*.kt") }
 val sourceFiles = fileTree("sources/src/main/kotlin") { include("**/*.kt") }
 val sourceTestFiles = fileTree("sources/src/test/kotlin") { include("**/*.kt") }
+val sourceToolFiles = fileTree("tools/src/main/kotlin") { include("**/*.kt") }
 val metadata = JsonSlurper().parse(file("bundle.json")) as Map<*, *>
 val bundleId = metadata["id"].toString()
 val bundleVersion = (metadata["versionCode"] as Number).toInt()
@@ -132,6 +134,33 @@ val compileSourceTests by tasks.registering(JavaExec::class) {
             "-classpath", testClasspath, "-d", sourceTestClasses.get().asFile.absolutePath) + sourceTestFiles.files.sortedBy { it.path }.map { it.absolutePath }
     }
 }
+val compileSourceTools by tasks.registering(JavaExec::class) {
+    dependsOn(sourceJar)
+    inputs.files(sourceToolFiles, sourceLibraries, sourceJar.flatMap { it.archiveFile }, sdkJar.flatMap { it.archiveFile })
+    outputs.dir(sourceToolClasses)
+    classpath = kotlinCompiler
+    mainClass.set("org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")
+    doFirst {
+        delete(sourceToolClasses.get().asFile)
+        args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2",
+            "-classpath", files(sourceJar.get().archiveFile, sdkJar.get().archiveFile, sourceLibraries).asPath,
+            "-d", sourceToolClasses.get().asFile.absolutePath) + sourceToolFiles.files.sortedBy { it.path }.map { it.absolutePath }
+    }
+}
+val sourceMetadata = layout.buildDirectory.file("sources/catalogue.json")
+val generateSourceMetadata by tasks.registering(JavaExec::class) {
+    dependsOn(compileSourceTools)
+    inputs.files(sourceJar.flatMap { it.archiveFile }, "bundle.json")
+    outputs.file(sourceMetadata)
+    classpath = files(sourceToolClasses, sourceJar.flatMap { it.archiveFile }, sdkJar.flatMap { it.archiveFile }, sourceLibraries)
+    mainClass.set("com.tensei.tools.SourceCatalogueMetadataKt")
+    args(bundleId, sourceMetadata.get().asFile.absolutePath)
+}
+tasks.register<JavaExec>("smokeSources") {
+    dependsOn(compileSourceTools)
+    classpath = files(sourceToolClasses, sourceJar.flatMap { it.archiveFile }, sdkJar.flatMap { it.archiveFile }, sourceLibraries)
+    mainClass.set("com.tensei.tools.SourceSmokeKt")
+}
 tasks.named<Test>("test") {
     dependsOn(compileSourceTests)
     testClassesDirs = files(sourceTestClasses)
@@ -208,12 +237,12 @@ val verifyPayload by tasks.registering {
     }
 }
 val publishSources by tasks.registering {
-    dependsOn(verifyPayload)
-    inputs.file(dexZip)
+    dependsOn(verifyPayload, generateSourceMetadata)
+    inputs.files(dexZip, sourceMetadata)
     outputs.file("index.json")
     doLast {
         val digest = MessageDigest.getInstance("SHA-256").digest(dexZip.asFile.readBytes()).joinToString("") { "%02x".format(it) }
-        val index = linkedMapOf("schemaVersion" to 1, "apiVersion" to apiVersion, "extensions" to listOf(linkedMapOf(
+        val index = linkedMapOf("schemaVersion" to 1, "apiVersion" to apiVersion, "sources" to JsonSlurper().parse(sourceMetadata.get().asFile), "extensions" to listOf(linkedMapOf(
             "id" to bundleId, "versionCode" to bundleVersion,
             "downloadUrl" to "https://raw.githubusercontent.com/ahmedTensei/TenseiSources/main/releases/${dexZip.asFile.name}",
             "sha256" to digest, "factoryClass" to metadata["factoryClass"].toString()

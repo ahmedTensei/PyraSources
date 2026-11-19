@@ -7,6 +7,7 @@ on:
     paths:
       - 'sources/**'
       - 'sdk/**'
+      - 'tools/**'
       - 'bundle.json'
       - 'build.gradle.kts'
       - 'gradle/**'

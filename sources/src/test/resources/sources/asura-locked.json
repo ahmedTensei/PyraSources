@@ -1,0 +1,21 @@
+{
+  "data": {
+    "access_gate": "",
+    "chapter": {
+      "id": 263366,
+      "series_id": 6055,
+      "number": 38,
+      "slug": "chapter-38",
+      "page_count": 0,
+      "is_premium": true,
+      "comments_enabled": true,
+      "early_access_until": "2026-11-19T06:06:15.740743Z",
+      "published_at": "2026-11-19T00:06:15.740743Z",
+      "view_count": 324,
+      "created_at": "2026-11-19T00:06:17.410381Z",
+      "series_slug": "immortals-way-of-life"
+    },
+    "is_locked": true,
+    "unlock_time": "2026-11-19T06:06:15.740743Z"
+  }
+}

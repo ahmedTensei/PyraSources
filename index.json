@@ -1,12 +1,59 @@
 {
     "schemaVersion": 1,
     "apiVersion": 1,
+    "sources": [
+        {
+            "id": "mangatek",
+            "name": "MangaTek",
+            "baseUrl": "https://mangatek.com",
+            "lang": [
+                "ar"
+            ],
+            "extensionId": "tensei-official"
+        },
+        {
+            "id": "mangaswat",
+            "name": "Swat Manga",
+            "baseUrl": "https://meshmanga.com",
+            "lang": [
+                "ar"
+            ],
+            "extensionId": "tensei-official"
+        },
+        {
+            "id": "teamx",
+            "name": "Team X",
+            "baseUrl": "https://olympustaff.com",
+            "lang": [
+                "ar"
+            ],
+            "extensionId": "tensei-official"
+        },
+        {
+            "id": "asurascans",
+            "name": "Asura Scans",
+            "baseUrl": "https://asurascans.com",
+            "lang": [
+                "en"
+            ],
+            "extensionId": "tensei-official"
+        },
+        {
+            "id": "rawkuma",
+            "name": "Rawkuma",
+            "baseUrl": "https://rawkuma.net",
+            "lang": [
+                "ja"
+            ],
+            "extensionId": "tensei-official"
+        }
+    ],
     "extensions": [
         {
             "id": "tensei-official",
-            "versionCode": 2,
-            "downloadUrl": "https://raw.githubusercontent.com/ahmedTensei/TenseiSources/main/releases/tensei-official-2.dex.zip",
-            "sha256": "c30fefb4d6edac27f4db908bb814f1e2d0bfdea2508932862fb56a5e16cbea07",
+            "versionCode": 3,
+            "downloadUrl": "https://raw.githubusercontent.com/ahmedTensei/TenseiSources/main/releases/tensei-official-3.dex.zip",
+            "sha256": "53d2175bcf8e7f17eaa5fd1439c1cc3a4499454131a8c65d7f45edd2ee12afa1",
             "factoryClass": "com.tensei.sources.PublisherSourceFactory"
         }
     ]

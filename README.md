@@ -2,7 +2,9 @@
 
 The publisher-controlled source repository for Tensei. This repository contains source parsers, source API contracts, source test fixtures, and extension build tooling. It does not contain the Tensei application, its APK, screens, databases, user data, or engine models.
 
-Tensei reads only this repository's [index.json](index.json). Users cannot configure another repository or import custom sources. The current extension supplies MangaTek (`mangatek`), Swat Manga (`mangaswat`), and Team X (`teamx`), retaining their independent source identities, URLs, pagination, chapter locks, language metadata, image headers, and unavailable-page behavior.
+Tensei reads only this repository's [index.json](index.json). Users cannot configure another repository or import custom sources. Version 3 supplies MangaTek (`mangatek`, Arabic), Swat Manga (`mangaswat`, Arabic), Team X (`teamx`, Arabic), Asura Scans (`asurascans`, English), and Rawkuma (`rawkuma`, Japanese), retaining independent identities, URLs, pagination, access limits, language metadata, and image headers.
+
+The index includes a `sources` metadata array generated from the actual source factory without contacting websites. Each item contains `id`, `name`, `baseUrl`, `lang`, and `extensionId`; the original schema/API version 1 and extension checksum/factory fields remain compatible. This metadata supports the host's explicit per-source installation UI. Fetching the catalogue does not itself mean that every source is installed or updated; the host exposes only source IDs the user selects.
 
 ## Repository layout
 
@@ -10,6 +12,7 @@ Tensei reads only this repository's [index.json](index.json). Users cannot confi
 - `sources/src/test`: trimmed public-response fixtures and source regression tests; fixtures are never used as app content.
 - `sdk/src/main/kotlin`: compile-only source API version 1. These contracts are supplied by the app at runtime and are excluded from extension payloads.
 - `bundle.json`: publisher bundle identity, source API version, factory, and monotonically increasing version code.
+- `tools/src/main/kotlin`: build-only catalogue metadata exporter and optional live source smoke check, excluded from payloads.
 - `releases/*.dex.zip`: Android extension payloads containing `classes.dex`, without APKs or application code.
 - `index.json`: the fixed publisher catalogue, with version and SHA-256 of each extension.
 
@@ -29,6 +32,14 @@ The build uses the Kotlin 2.4.21 compiler with the Kotlin 2.2 language/API subse
 
 The JVM source JAR is emitted under `build/sources/` for app-side fixture tests. Android loads the verified Dex ZIP through the stable `com.tensei.app.domain.source.PublisherSourceFactory` contract. The host supplies its shared `OkHttpClient`, including cookies and verification handling. The publisher factory returns sources in catalogue order.
 
+The deterministic test suite parses captured public-response fixtures without network dependencies. An optional live end-to-end check for the two new providers is available separately:
+
+```powershell
+./gradlew.bat smokeSources
+```
+
+Asura uses the public native API at `api.asurascans.com` observed in its current Astro client, including catalogue/search, details by slug, chapters, public page URLs, and explicit locked-reader responses. Rawkuma uses the current WordPress/HTMX advanced-search nonce/form, native `the_page` pagination, schema.org work data, and `section[data-image-data]` reader images. Unsupported native orders are not fabricated. Site/network/protection failures remain typed source errors; a locked chapter does not produce invented pages.
+
 For future sources with several website/API hosts, keep a correct `Referer` for every request. Source authors may also attach `Request.Builder.tag(String::class.java, id)` to identify the source to the host's verification coordinator; this tag is private request metadata and is not sent as an HTTP header. The current parsers already supply their website origin as the referrer, including Swat's separate API host.
 
 ## Add or update a source
@@ -41,4 +52,4 @@ For future sources with several website/API hosts, keep a correct `Referer` for 
 
 The publishing workflow can be run manually after review. It builds and verifies sources, then commits only the generated source payload and index to `main`. Repository write access controls who can publish source updates; no custom repository or server URL is exposed in the app.
 
-The current parsers were moved from Tensei without changing parsing behavior. Parser fixture entry points and `AstroProps` are public so the app's existing source regression tests can test the external JAR instead of keeping copies of implementations inside the app project.
+The original three parsers retain their existing parsing behavior. Asura and Rawkuma were added from live structures captured on 19 November 2026. Parser fixture entry points and `AstroProps` are public so host regression tests can use the external JAR without retaining site implementations inside the app project. Published version 1 and version 2 ZIP files remain unchanged; version 3 has its own immutable URL.

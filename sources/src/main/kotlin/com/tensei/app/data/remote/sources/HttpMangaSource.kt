@@ -52,7 +52,7 @@ abstract class HttpMangaSource(
         extraHeaders: Map<String, String> = emptyMap()
     ): String {
         val url = resolveUrl(urlOrPath)
-        val request = Request.Builder().url(url).apply {
+        val request = Request.Builder().url(url).tag(String::class.java, id).apply {
             defaultHeaders().forEach { (k, v) -> header(k, v) }
             extraHeaders.forEach { (k, v) -> header(k, v) }
         }.build()
