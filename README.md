@@ -2,15 +2,15 @@
 
 The publisher-controlled source repository for Pyra. This repository contains source parsers, source API contracts, source test fixtures, and extension build tooling. It does not contain the Pyra application, its APK, screens, databases, user data, or engine models.
 
-Pyra reads only this repository's [index.json](index.json). Users cannot configure another repository or import custom sources. Version 3 supplies MangaTek (`mangatek`, Arabic), Swat Manga (`mangaswat`, Arabic), Team X (`teamx`, Arabic), Asura Scans (`asurascans`, English), and Rawkuma (`rawkuma`, Japanese), retaining independent identities, URLs, pagination, access limits, language metadata, and image headers.
+Pyra reads only this repository's [index.json](index.json). Users cannot configure another repository or import custom sources. Version 4 supplies MangaTek (`mangatek`, Arabic), Swat Manga (`mangaswat`, Arabic), Team X (`teamx`, Arabic), Asura Scans (`asurascans`, English), and Rawkuma (`rawkuma`, Japanese), retaining independent identities, URLs, pagination, access limits, language metadata, and image headers.
 
-The index includes a `sources` metadata array generated from the actual source factory without contacting websites. Each item contains `id`, `name`, `baseUrl`, `lang`, and `extensionId`; the original schema/API version 1 and extension checksum/factory fields remain compatible. This metadata supports the host's explicit per-source installation UI. Fetching the catalogue does not itself mean that every source is installed or updated; the host exposes only source IDs the user selects.
+The index includes a `sources` metadata array generated from the actual source factory without contacting websites. Each item contains `id`, `name`, `baseUrl`, `lang`, and `extensionId`; the schema version 1 and source API version 2 and extension checksum/factory fields remain compatible. This metadata supports the host's explicit per-source installation UI. Fetching the catalogue does not itself mean that every source is installed or updated; the host exposes only source IDs the user selects.
 
 ## Repository layout
 
 - `sources/src/main/kotlin`: source implementations and the publisher factory.
 - `sources/src/test`: trimmed public-response fixtures and source regression tests; fixtures are never used as app content.
-- `sdk/src/main/kotlin`: compile-only source API version 1. These contracts are supplied by the app at runtime and are excluded from extension payloads.
+- `sdk/src/main/kotlin`: compile-only source API version 2. These contracts are supplied by the app at runtime and are excluded from extension payloads.
 - `bundle.json`: publisher bundle identity, source API version, factory, and monotonically increasing version code.
 - `tools/src/main/kotlin`: build-only catalogue metadata exporter and optional live source smoke check, excluded from payloads.
 - `releases/*.dex.zip`: Android extension payloads containing `classes.dex`, without APKs or application code.
@@ -52,4 +52,6 @@ For future sources with several website/API hosts, keep a correct `Referer` for 
 
 The publishing workflow can be run manually after review. It builds and verifies sources, then commits only the generated source payload and index to `main`. Repository write access controls who can publish source updates; no custom repository or server URL is exposed in the app.
 
-The original three parsers retain their existing parsing behavior. Asura and Rawkuma were added from live structures captured on 19 November 2026. Parser fixture entry points and `AstroProps` are public so host regression tests can use the external JAR without retaining site implementations inside the app project. Published version 1 and version 2 ZIP files remain unchanged; version 3 has its own immutable URL.
+The original three parsers retain their existing parsing behavior. Asura and Rawkuma were added from live structures captured on 19 November 2026. Parser fixture entry points and `AstroProps` are public so host regression tests can use the external JAR without retaining site implementations inside the app project. Published version 1 and version 2 ZIP files remain unchanged; version 4 supplies the renamed Pyra API with its own immutable URL.
+
+Optional engine APKs and verified metadata are distributed separately under engines/. They are never included in the source DEX payload or the main Pyra APK. The Android system confirms their Settings-initiated installation.

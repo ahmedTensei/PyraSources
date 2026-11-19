@@ -244,7 +244,7 @@ val publishSources by tasks.registering {
         val digest = MessageDigest.getInstance("SHA-256").digest(dexZip.asFile.readBytes()).joinToString("") { "%02x".format(it) }
         val index = linkedMapOf("schemaVersion" to 1, "apiVersion" to apiVersion, "sources" to JsonSlurper().parse(sourceMetadata.get().asFile), "extensions" to listOf(linkedMapOf(
             "id" to bundleId, "versionCode" to bundleVersion,
-            "downloadUrl" to "https://raw.githubusercontent.com/ahmedPyra/PyraSources/main/releases/${dexZip.asFile.name}",
+            "downloadUrl" to "https://raw.githubusercontent.com/ahmedTensei/PyraSources/main/releases/${dexZip.asFile.name}",
             "sha256" to digest, "factoryClass" to metadata["factoryClass"].toString()
         )))
         file("index.json").writeText(JsonOutput.prettyPrint(JsonOutput.toJson(index)) + "\n")

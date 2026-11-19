@@ -52,7 +52,7 @@
         {
             "id": "pyra-official",
             "versionCode": 4,
-            "downloadUrl": "https://raw.githubusercontent.com/ahmedPyra/PyraSources/main/releases/pyra-official-4.dex.zip",
+            "downloadUrl": "https://raw.githubusercontent.com/ahmedTensei/PyraSources/main/releases/pyra-official-4.dex.zip",
             "sha256": "035a9575ac5c3666f25863a052200c91b77097d7eac54309e3a8b51654e99ef7",
             "factoryClass": "com.pyramanga.sources.PublisherSourceFactory"
         }
