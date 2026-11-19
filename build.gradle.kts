@@ -65,13 +65,13 @@ val compileSdk by tasks.registering(JavaExec::class) {
     mainClass.set("org.jetbrains.kotlin.cli.jvm.K2JVMCompiler")
     doFirst {
         delete(sdkClasses.get().asFile)
-        args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "TenseiSourceApi",
+        args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "PyraSourceApi",
             "-classpath", sourceLibraries.asPath, "-d", sdkClasses.get().asFile.absolutePath) + sdkFiles.files.sortedBy { it.path }.map { it.absolutePath }
     }
 }
 val sdkJar by tasks.registering(Jar::class) {
     dependsOn(compileSdk)
-    archiveFileName.set("tensei-source-api-$apiVersion.jar")
+    archiveFileName.set("pyra-source-api-$apiVersion.jar")
     destinationDirectory.set(layout.buildDirectory.dir("sdk"))
     from(sdkClasses)
     isPreserveFileTimestamps = false
@@ -86,7 +86,7 @@ val compileSources by tasks.registering(JavaExec::class) {
     doFirst {
         delete(sourceClasses.get().asFile)
         val sdkClasspath = files(sdkJar.get().archiveFile, sourceLibraries).asPath
-        args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "TenseiOfficialSources",
+        args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "PyraOfficialSources",
             "-classpath", sdkClasspath, "-d", sourceClasses.get().asFile.absolutePath) + sourceFiles.files.sortedBy { it.path }.map { it.absolutePath }
     }
 }
@@ -130,7 +130,7 @@ val compileSourceTests by tasks.registering(JavaExec::class) {
     doFirst {
         delete(sourceTestClasses.get().asFile)
         val testClasspath = files(sourceJar.get().archiveFile, sdkJar.get().archiveFile, sourceTestLibraries).asPath
-        args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "TenseiSourceTests",
+        args = listOf("-no-stdlib", "-no-reflect", "-jvm-target", "17", "-language-version", "2.2", "-api-version", "2.2", "-module-name", "PyraSourceTests",
             "-classpath", testClasspath, "-d", sourceTestClasses.get().asFile.absolutePath) + sourceTestFiles.files.sortedBy { it.path }.map { it.absolutePath }
     }
 }
@@ -153,13 +153,13 @@ val generateSourceMetadata by tasks.registering(JavaExec::class) {
     inputs.files(sourceJar.flatMap { it.archiveFile }, "bundle.json")
     outputs.file(sourceMetadata)
     classpath = files(sourceToolClasses, sourceJar.flatMap { it.archiveFile }, sdkJar.flatMap { it.archiveFile }, sourceLibraries)
-    mainClass.set("com.tensei.tools.SourceCatalogueMetadataKt")
+    mainClass.set("com.pyramanga.tools.SourceCatalogueMetadataKt")
     args(bundleId, sourceMetadata.get().asFile.absolutePath)
 }
 tasks.register<JavaExec>("smokeSources") {
     dependsOn(compileSourceTools)
     classpath = files(sourceToolClasses, sourceJar.flatMap { it.archiveFile }, sdkJar.flatMap { it.archiveFile }, sourceLibraries)
-    mainClass.set("com.tensei.tools.SourceSmokeKt")
+    mainClass.set("com.pyramanga.tools.SourceSmokeKt")
 }
 tasks.named<Test>("test") {
     dependsOn(compileSourceTests)
@@ -217,7 +217,7 @@ val verifyPayload by tasks.registering {
     doLast {
         ZipFile(sourceJar.get().archiveFile.get().asFile).use { jar ->
             val classes = jar.entries().asSequence().filter { it.name.endsWith(".class") }.toList()
-            check(classes.isNotEmpty() && classes.all { it.name.startsWith("com/tensei/app/data/remote/sources/") || it.name.startsWith("com/tensei/sources/") }) {
+            check(classes.isNotEmpty() && classes.all { it.name.startsWith("com/pyramanga/app/data/remote/sources/") || it.name.startsWith("com/pyramanga/sources/") }) {
                 "The extension must contain only source classes; host SDK and application classes are forbidden."
             }
         }
@@ -244,7 +244,7 @@ val publishSources by tasks.registering {
         val digest = MessageDigest.getInstance("SHA-256").digest(dexZip.asFile.readBytes()).joinToString("") { "%02x".format(it) }
         val index = linkedMapOf("schemaVersion" to 1, "apiVersion" to apiVersion, "sources" to JsonSlurper().parse(sourceMetadata.get().asFile), "extensions" to listOf(linkedMapOf(
             "id" to bundleId, "versionCode" to bundleVersion,
-            "downloadUrl" to "https://raw.githubusercontent.com/ahmedTensei/TenseiSources/main/releases/${dexZip.asFile.name}",
+            "downloadUrl" to "https://raw.githubusercontent.com/ahmedPyra/PyraSources/main/releases/${dexZip.asFile.name}",
             "sha256" to digest, "factoryClass" to metadata["factoryClass"].toString()
         )))
         file("index.json").writeText(JsonOutput.prettyPrint(JsonOutput.toJson(index)) + "\n")

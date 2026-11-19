@@ -1,1 +1,1 @@
-rootProject.name = "TenseiSources"
+rootProject.name = "PyraSources"

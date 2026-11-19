@@ -1,6 +1,6 @@
 {
-  "id": "tensei-official",
-  "versionCode": 3,
-  "apiVersion": 1,
-  "factoryClass": "com.tensei.sources.PublisherSourceFactory"
+  "id": "pyra-official",
+  "versionCode": 4,
+  "apiVersion": 2,
+  "factoryClass": "com.pyramanga.sources.PublisherSourceFactory"
 }

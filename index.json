@@ -1,6 +1,6 @@
 {
     "schemaVersion": 1,
-    "apiVersion": 1,
+    "apiVersion": 2,
     "sources": [
         {
             "id": "mangatek",
@@ -9,7 +9,7 @@
             "lang": [
                 "ar"
             ],
-            "extensionId": "tensei-official"
+            "extensionId": "pyra-official"
         },
         {
             "id": "mangaswat",
@@ -18,7 +18,7 @@
             "lang": [
                 "ar"
             ],
-            "extensionId": "tensei-official"
+            "extensionId": "pyra-official"
         },
         {
             "id": "teamx",
@@ -27,7 +27,7 @@
             "lang": [
                 "ar"
             ],
-            "extensionId": "tensei-official"
+            "extensionId": "pyra-official"
         },
         {
             "id": "asurascans",
@@ -36,7 +36,7 @@
             "lang": [
                 "en"
             ],
-            "extensionId": "tensei-official"
+            "extensionId": "pyra-official"
         },
         {
             "id": "rawkuma",
@@ -45,16 +45,16 @@
             "lang": [
                 "ja"
             ],
-            "extensionId": "tensei-official"
+            "extensionId": "pyra-official"
         }
     ],
     "extensions": [
         {
-            "id": "tensei-official",
-            "versionCode": 3,
-            "downloadUrl": "https://raw.githubusercontent.com/ahmedTensei/TenseiSources/main/releases/tensei-official-3.dex.zip",
-            "sha256": "53d2175bcf8e7f17eaa5fd1439c1cc3a4499454131a8c65d7f45edd2ee12afa1",
-            "factoryClass": "com.tensei.sources.PublisherSourceFactory"
+            "id": "pyra-official",
+            "versionCode": 4,
+            "downloadUrl": "https://raw.githubusercontent.com/ahmedPyra/PyraSources/main/releases/pyra-official-4.dex.zip",
+            "sha256": "035a9575ac5c3666f25863a052200c91b77097d7eac54309e3a8b51654e99ef7",
+            "factoryClass": "com.pyramanga.sources.PublisherSourceFactory"
         }
     ]
 }
